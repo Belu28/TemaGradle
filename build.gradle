@@ -1,11 +1,31 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'org.example'
 version '0.1.0-SNAPSHOT'
 
+def mainClassName = 'org.example.Main'
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+}
+dependencies {
+    implementation group: 'org.fusesource.jansi', name: 'jansi', version: '2.4.0'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = mainClassName
 }
